@@ -3,3 +3,9 @@ __pycache__/
 *.pyc
 .env
 config/.env
+.pytest_cache/
+
+# Runtime data (memory database may hold personal information)
+data/
+logs/*
+!logs/.gitkeep

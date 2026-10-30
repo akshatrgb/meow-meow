@@ -1,0 +1,34 @@
+# systemd unit for Meow Meow.
+# Install:  sudo cp deploy/meow-meow.service /etc/systemd/system/
+#           (edit User= and the paths if your username/home differ from "pi")
+#           sudo systemctl daemon-reload && sudo systemctl enable --now meow-meow
+# Logs:     journalctl -u meow-meow -f      (and ~/meow-meow/logs/meow.log)
+[Unit]
+Description=Meow Meow AI companion robot
+After=network-online.target sound.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=pi
+Group=pi
+SupplementaryGroups=audio gpio spi
+WorkingDirectory=/home/pi/meow-meow
+Environment=PYTHONUNBUFFERED=1
+Environment=INPUT_MODE=voice
+ExecStart=/home/pi/meow-meow/.venv/bin/python -m src.main
+# SIGTERM triggers the graceful shutdown (motors safe, screen blanked).
+KillSignal=SIGTERM
+TimeoutStopSec=10
+Restart=on-failure
+RestartSec=5
+# Keep memory bounded on a 512 MB board.
+MemoryMax=300M
+# Light hardening; hardware access needs /dev, so no PrivateDevices.
+NoNewPrivileges=true
+ProtectSystem=full
+ProtectHome=read-only
+ReadWritePaths=/home/pi/meow-meow/logs /home/pi/meow-meow/data
+
+[Install]
+WantedBy=multi-user.target

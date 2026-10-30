@@ -1,0 +1,6 @@
+# Extra packages for the real robot hardware (install on the Pi only).
+-r requirements.txt
+gpiozero>=2.0       # GPIO for display control pins and TB6612FNG motor driver
+lgpio>=0.2          # gpiozero backend on Raspberry Pi OS Bookworm/Trixie
+spidev>=3.6         # SPI bus for the ST7789 display
+Pillow>=10.0        # eye rendering (or: sudo apt install python3-pil)
